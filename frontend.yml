@@ -1,0 +1,14 @@
+- name: frontend playbook
+  hosts: all
+  become: yes
+  tasks:
+    - name: disable default nginx
+      ansible.builtin.shell: dnf module disable ngnix -y
+
+    - name: enable nginx 24 version
+      ansible.builtin.shell: dnf module enable nginx -y
+
+    - name: install nginx
+      ansible.builtin.dnf:
+          name: nginx
+          state: installed
