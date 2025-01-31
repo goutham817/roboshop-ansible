@@ -1,4 +1,4 @@
-- name: set prompt
+- name: set-prompt
   ansible.builtin.shell: set-prompt frontend
 
 - name: disable nginx
