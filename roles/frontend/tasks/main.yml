@@ -1,16 +1,16 @@
-- name: set-prompt
-  ansible.builtin.shell: set-prompt frontend
+-  name: set-prompt
+   ansible.builtin.shell: set-prompt frontend
 
-- name: disable nginx
-  ansible.builtin.shell: dnf module disable nginx -y
+-  name: disable nginx
+   ansible.builtin.shell: dnf module disable nginx -y
 
-- name: enable nginx
-  ansible.builtin.shell: dnf module enable nginx 24 -y
+-  name: enable nginx
+   ansible.builtin.shell: dnf module enable nginx 24 -y
 
-- name: Install the latest version of nginx
-  ansible.builtin.dnf:
-    name: nginx
-    state: installed
+-  name: Install the latest version of nginx
+   ansible.builtin.dnf:
+     name: nginx
+     state: installed
 
 
 
