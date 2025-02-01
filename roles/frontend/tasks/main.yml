@@ -1,43 +1,40 @@
-
-- name: set prompt
-  ansible.builtin.shell: set-prompt "{{ app_name }}-{{ env }}"
-
-- name: disable nginx
+- name: Disable Default Nginx
   ansible.builtin.shell: dnf module disable nginx -y
 
-- name: enable nginx
+- name: Enable Nginx 24 Version
   ansible.builtin.shell: dnf module enable nginx:1.24 -y
 
-- name: install nginx
+- name: Install Nginx
   ansible.builtin.dnf:
-   name: nginx
-   state: installed
+    name: nginx
+    state: installed
 
-- name: nginx conf
+- name: Copy nginx config file
   ansible.builtin.template:
     src: nginx.conf
     dest: /etc/nginx/nginx.conf
 
-- name: clean old content
+- name: Clean up old application directory
   ansible.builtin.file:
     path: /usr/share/nginx/html
     state: absent
 
-- name: create dicectory
+- name: Create application directory
   ansible.builtin.file:
     path: /usr/share/nginx/html
     state: directory
 
-- name: download content
+- name: Download and extract application content
   ansible.builtin.unarchive:
     src: https://roboshop-artifacts.s3.amazonaws.com/frontend-v3.zip
     dest: /usr/share/nginx/html
     remote_src: yes
 
-- name: start nginx
+- name: Start nginx
   ansible.builtin.systemd_service:
     name: nginx
     state: restarted
     enabled: yes
+
 
 
