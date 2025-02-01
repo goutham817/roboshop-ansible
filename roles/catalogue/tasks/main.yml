@@ -1,0 +1,66 @@
+- name: set prompt
+  ansible.builtin.shell: set-prompt "{{ app_name }}-{{ env }}
+
+- name: disable default nodejs
+  ansible.builtin.shell: dnf module disable nodejs -y
+
+- name: enable nodejs:20
+  ansible.builtin.shell: dnf module enable nodjes:20 -y
+
+- name: install nodejs
+  ansible.builtin.dnf:
+    name: nodejs
+    state: installed
+
+- name: add user
+  ansible.builtin.user:
+    name: roboshop
+
+- name: delete directory
+  ansible.builtin.file:
+    path: /app
+    state: absent
+
+- name: create directory
+  ansible.builtin.file:
+    path: /app
+    state: directory
+
+- name:  downloading content
+  ansible.builtin.unarchive:
+  src: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
+  dest: /app
+  remote_src: yes
+
+- name: download dependencies
+  community.general.npm:
+    path: /app
+
+- name: catalogue.service
+  ansible.builtin.template:
+    src: catalogue.service
+    dest: /ect/systemd/system/catalogue.service
+
+- name: copy mongod client
+  ansible.builtin.include_role:
+    name: mongodb
+    tasks_from: files
+
+- name: download mongod client
+  ansible.builtin.dnf:
+    name: mongodb-mongosh
+    state: installed
+
+- name: load master data
+  ansible.builtin.shell: mongosh --host mongodb-{{ env }}.devopsb78.online </app/db/master-data.js
+
+- name: restart nodejs
+  ansible.builtin.systemd_service:
+    name: nodejs
+    daemon_reload: true
+    state: restarted
+    enabled: yes
+
+
+
+
