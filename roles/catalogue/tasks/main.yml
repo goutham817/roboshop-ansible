@@ -41,12 +41,12 @@
     src: catalogue.service
     dest: /ect/systemd/system/catalogue.service
 
-- name: copy mongod client
-  ansible.builtin.include_role:
-    name: mongodb
-    tasks_from: files
+- name: Copy MongoDB repo file
+  ansible.builtin.copy:
+    src: mongodb.repo
+    dest: /etc/yum.repos.d/mongodb.repo
 
-- name: download mongod client
+- name: Install MongoDB Client
   ansible.builtin.dnf:
     name: mongodb-mongosh
     state: installed
@@ -54,9 +54,9 @@
 - name: load master data
   ansible.builtin.shell: mongosh --host mongodb-{{ env }}.devopsb78.online </app/db/master-data.js
 
-- name: restart nodejs
+- name: restart catalogue
   ansible.builtin.systemd_service:
-    name: nodejs
+    name: catalogue
     daemon_reload: true
     state: restarted
     enabled: yes
