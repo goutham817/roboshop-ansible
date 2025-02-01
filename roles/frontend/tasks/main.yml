@@ -1,6 +1,6 @@
 
 - name: set prompt
-  ansible.builtin.shell: set-prompt frontend
+  ansible.builtin.shell: set-prompt {{ app_name }}-{{ env}}
 
 - name: disable nginx
   ansible.builtin.shell: dnf module disable nginx -y
@@ -13,8 +13,14 @@
    name: nginx
    state: installed
 
+- name: nginx conf
+  ansible.builtin.template:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+
 - name: start nginx
   ansible.builtin.systemd_service:
-   name: nginx
-   state: restarted
-   enabled: yes
+    name: nginx
+    state: restarted
+    enabled: yes
+
