@@ -1,65 +1,24 @@
 - name: set prompt
-  ansible.builtin.shell: set-prompt "{{ app_name }}-{{ env }}"
+  ansible.builtin.shell: set-prompt "{{ app_name }}-{{ env }}
 
-- name: disable default nodejs
-  ansible.builtin.shell: dnf module disable nodejs -y
 
-- name: enable nodejs:20
-  ansible.builtin.shell: dnf module enable nodjes:20 -y
+nodejs_setup
 
-- name: install nodejs
-  ansible.builtin.dnf:
-    name: nodejs
-    state: installed
+print_heading "Copy MongoDB repo file"
+cp $scripts_path/mongodb.repo /etc/yum.repos.d/mongodb.repo &>>$log_file
+status_check $?
 
-- name: add user
-  ansible.builtin.user:
-    name: roboshop
+print_heading "Install MongoDB Client"
+dnf install mongodb-mongosh -y &>>$log_file
+status_check $?
 
-- name: delete directory
-  ansible.builtin.file:
-    path: /app
-    state: absent
+print_heading "Load Master Data"
+mongosh --host mongodb.devopsb78.online </app/db/master-data.js  &>>$log_file
+status_check $?
 
-- name: create directory
-  ansible.builtin.file:
-    path: /app
-    state: directory
-
-- name: downloading content
-  ansible.builtin.unarchive:
-  src: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
-  dest: /app
-  remote_src: yes
-
-- name: download dependencies
-  community.general.npm:
-    path: /app
-
-- name: catalogue.service
-  ansible.builtin.template:
-    src: catalogue.service
-    dest: /ect/systemd/system/catalogue.service
-
-- name: Copy MongoDB repo file
-  ansible.builtin.copy:
-    src: mongodb.repo
-    dest: /etc/yum.repos.d/mongodb.repo
-
-- name: Install MongoDB Client
-  ansible.builtin.dnf:
-    name: mongodb-mongosh
-    state: installed
-
-- name: load master data
-  ansible.builtin.shell: mongosh --host mongodb-{{ env }}.devopsb78.online </app/db/master-data.js
-
-- name: restart catalogue
-  ansible.builtin.systemd_service:
-    name: catalogue
-    daemon_reload: true
-    state: restarted
-    enabled: yes
+print_heading "Restart Catalogue Service"
+systemctl restart catalogue &>>$log_file
+status_check $?
 
 
 
