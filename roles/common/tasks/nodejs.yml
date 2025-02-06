@@ -9,9 +9,9 @@
       name: nodejs
       state: installed
 
-- name: include app_prerequisities
+- name: include app-prerequisites
   ansible.builtin.include_task:
-    file: app_prerequisities.yml
+    file: app_prerequisites.yml
 
 - name: download dependencies
   community.general.npm:
