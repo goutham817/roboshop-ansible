@@ -1,24 +1,28 @@
 - name: set prompt
   ansible.builtin.shell: set-prompt "{{ app_name }}-{{ env }}
 
+- name: include nodejs role
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: nodejs.yml
 
-nodejs_setup
+- name: copy mongodb repo
+  ansible.builtin.templates:
+    src: {{ app_name }}.repo
+    dest: /etc/yum.repos.d/{{ app_name }}.repo
 
-print_heading "Copy MongoDB repo file"
-cp $scripts_path/mongodb.repo /etc/yum.repos.d/mongodb.repo &>>$log_file
-status_check $?
+- name: install mongodb client
+  ansible.builtin.dnf:
+    name: mongodb-mongosh
+    state: installed
 
-print_heading "Install MongoDB Client"
-dnf install mongodb-mongosh -y &>>$log_file
-status_check $?
+- name: load master data
+  ansible.builtin.shell: mongosh --host mongodb.devopsb78.online </app/db/master-data.js
 
-print_heading "Load Master Data"
-mongosh --host mongodb.devopsb78.online </app/db/master-data.js  &>>$log_file
-status_check $?
-
-print_heading "Restart Catalogue Service"
-systemctl restart catalogue &>>$log_file
-status_check $?
+- name: restart catalogue
+  ansible.builtin.systemd_service:
+    name: catalogue
+    state: restarted
 
 
 

@@ -10,7 +10,7 @@
       state: installed
 
 - name: include app_prerequisities
-  ansible.builitin.include_task:
+  ansible.builtin.include_task:
     file: app_prerequisities.yml
 
 - name: download dependencies
@@ -19,5 +19,5 @@
 
 - name: include systemd_setup
   ansible.builtin.include_task:
-    file:systemd_setup.yml
+    file: systemd_setup.yml
 

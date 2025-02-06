@@ -1,0 +1,28 @@
+- name: set-prompt
+  ansible.builtin.shell: set-prompt "{{ app_name }}-{{ env }}"
+
+- name: copy service file
+  ansible.builtin.templates:
+    src: {{ app_name }}.service
+    dest: etc/systemd/system/{{ app_name }}.service
+
+- name: install golang
+  ansible.builtin.dnf:
+    name: golang
+    state: installed
+
+- name: include app_prerequisites
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: app_prerequisites.yml
+
+- name: download dependencies
+  ansible.builtin.shell: go mod init dispatch ; go get ; go build
+
+- name: start application service
+  ansible.builtin.systemd_service:
+    daemon-reload: yes
+    state: restarted
+    enabled: yes
+
+
