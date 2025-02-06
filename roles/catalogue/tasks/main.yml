@@ -17,7 +17,7 @@
     state: installed
 
 - name: load master data
-  ansible.builtin.shell: mongosh --host mongodb.devopsb78.online </app/db/master-data.js
+  ansible.builtin.shell: mongosh --host mongodb-{{ env }}.devopsb78.online </app/db/master-data.js
 
 - name: restart catalogue
   ansible.builtin.systemd_service:
