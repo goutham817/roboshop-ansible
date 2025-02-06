@@ -10,7 +10,7 @@
       state: installed
 
 - name: include app-prerequisites
-  ansible.builtin.include_task:
+  ansible.builtin.include_tasks:
     file: app_prerequisites.yml
 
 - name: download dependencies
