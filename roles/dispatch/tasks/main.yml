@@ -1,10 +1,10 @@
 - name: set-prompt
   ansible.builtin.shell: set-prompt "{{ app_name }}-{{ env }}"
 
-- name: service file
-  ansible.builtin.templates:
-  src: dispatch.service
-  dest: /etc/systemd/system/dispatch.service
+- name: systemd setup
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: systemd_setup.yml
 
 - name: install golang
   ansible.builtin.dnf:
