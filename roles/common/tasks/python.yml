@@ -1,6 +1,6 @@
 - name: install python
   ansible.builtin.dnf:
-    name: {{ iteam }}
+    name: {{ item }}
     state: installed
     loop:
       - python3

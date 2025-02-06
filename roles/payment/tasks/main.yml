@@ -1,7 +1,7 @@
 - name: set-prompt
   ansible.builtin.shell: set-prompt "{{ app_name }}-{{ env }}"
 
-- name: include python
+- name: python
   ansible.builtin.include_role:
     name: common
     tasks_from: python.yml
