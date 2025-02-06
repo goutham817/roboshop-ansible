@@ -5,7 +5,6 @@
 
 - name: include app_prerequisites
   ansible.builtin.include_tasks:
-    name: common
     file: app_prerequisites.yml
 
 - name: download application dependencies
