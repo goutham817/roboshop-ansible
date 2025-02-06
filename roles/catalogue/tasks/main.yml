@@ -8,7 +8,7 @@
 
 - name: copy mongodb repo
   ansible.builtin.templates:
-    src: {{ app_name }}.repo
+    src: "{{ app_name }}.repo"
     dest: /etc/yum.repos.d/{{ app_name }}.repo
 
 - name: install mongodb client
