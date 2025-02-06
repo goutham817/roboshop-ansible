@@ -1,7 +1,7 @@
 - name: set-prompt
   ansible.builtin.shell: set-prompt "{{ app_name }}-{{ env }}"
 
-- name: copy service file
+- name:  service file
   ansible.builtin.templates:
     src: dispatch.service
     dest: /etc/systemd/system/dispatch.service
