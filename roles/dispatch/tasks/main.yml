@@ -3,8 +3,8 @@
 
 - name: copy service file
   ansible.builtin.templates:
-    src: {{ app_name }}.service
-    dest: etc/systemd/system/{{ app_name }}.service
+    src: dispatch.service
+    dest: etc/systemd/system/dispatch.service
 
 - name: install golang
   ansible.builtin.dnf:
