@@ -14,9 +14,9 @@
 - name: Load SQL File
   ansible.builtin.shell: mysql -h mysql-{{ env }}.devopsb78.online -uroot -pRoboShop@1 < /app/db/{{ item }}.sql
   loop:
-    - schema
-    - app-user
-    - master-data
+  - schema
+  - app-user
+  - master-data
 
 - name: restart shipping
   ansible.builtin.systemd_service:
