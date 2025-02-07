@@ -18,6 +18,8 @@
 
 - name: download dependencies
   ansible.builtin.shell: go mod init dispatch ; go get ; go build
+  args:
+    chdir: /app
 
 - name: start application service
   ansible.builtin.systemd_service:
