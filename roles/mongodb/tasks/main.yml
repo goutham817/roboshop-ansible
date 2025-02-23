@@ -8,7 +8,7 @@
 
 - name: Install Mongodb Server
   ansible.builtin.dnf:
-    name: mongodb-org
+    name: mongodb
     state: installed
 
 - name: Update MongoDB listen address
